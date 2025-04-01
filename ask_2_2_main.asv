@@ -1,0 +1,36 @@
+clc
+clear
+
+cpudata = xlsread("Machine CPU.xlsx");%Αναγνωση των δεδομενων απο το αρχειο excel   
+
+x = cpudata(:,4:9);
+assoi = ones(length(x),1);%δημιουργια πινακα-στηλη με γραμμες ισες με τις γραμμες του x
+x = [x assoi];%προσθεση μιας στηλης ασσων στον πινακα x
+
+y = cpudata(:,10);
+
+%Υπολογισμος ολων των συντελεστων 
+[a,b,yp,mare,r2] = func3(x,y);
+
+%1η Γραφικη παρασταση 
+plot(1:209,y,'b')
+hold on
+plot(1:209,yp,'r')
+legend('Real','Estimated');
+xlabel('data')
+ylabel('Apodosi CPU')
+hold off
+
+%2η γραφικη πραγματικες-προβλεψεις 
+scatter(y,yp);
+xlabel('Estimated');
+ylabel('Real');
+
+k = linspace(8000,16000,100);
+c = linspace(32,128,100);
+[kk,cc] = meshgrid(k,c);
+x2 = [200 3000 k c 6 16 1];
+z = a*x2;
+mesh(kk,cc,z)
+
+
